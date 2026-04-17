@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../api";
 
 const Trending = () => {
   const [products, setProducts] = useState([]);
@@ -7,9 +7,7 @@ const Trending = () => {
   useEffect(() => {
     const fetchTrending = async () => {
       try {
-        const { data } = await axios.get(
-          "http://localhost:5000/api/products?trending=true"
-        );
+       const { data } = await API.get("/products?trending=true");
         setProducts(data);
       } catch (err) {
         console.log(err);

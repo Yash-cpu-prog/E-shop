@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 export default function Services() {
+  const navigate = useNavigate();
+
   const services = [
     {
       title: "Fast Delivery",
@@ -46,7 +50,7 @@ export default function Services() {
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
           Our Services
         </h1>
-        <p className="mt-4 text-gray-600 text-sm sm:text-base md:text-base px-2">
+        <p className="mt-4 text-gray-600 text-sm sm:text-base px-2">
           We provide premium ecommerce solutions for a smooth shopping experience.
         </p>
       </div>
@@ -66,6 +70,7 @@ export default function Services() {
 
               <img
                 src={item.img}
+                alt={item.title} // ✅ FIXED
                 className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
               />
 
@@ -102,7 +107,10 @@ export default function Services() {
           Ready to Shop?
         </h2>
 
-        <button className="mt-6 bg-pink-500 px-6 sm:px-8 py-2 sm:py-3 rounded-full hover:scale-105 transition text-sm sm:text-base">
+        <button
+          onClick={() => navigate("/products")} // ✅ FIXED
+          className="mt-6 bg-pink-500 px-6 sm:px-8 py-2 sm:py-3 rounded-full hover:scale-105 transition text-sm sm:text-base"
+        >
           Explore Products
         </button>
 
@@ -114,13 +122,13 @@ export default function Services() {
       <div className="mt-14 md:mt-20 text-center px-2">
 
         <h2 className="text-2xl sm:text-3xl font-bold mb-8 md:mb-10">
-          How It Works 
+          How It Works
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8">
 
           <div className="p-5 sm:p-6 bg-white rounded-2xl shadow hover:shadow-xl transition">
-            <div className="text-4xl sm:text-5xl">🛍️</div>
+            <div className="text-4xl sm:text-5xl"></div>
             <h3 className="font-bold mt-3 text-sm sm:text-base">Choose Product</h3>
             <p className="text-gray-500 text-xs sm:text-sm mt-2">
               Select from thousands of products.
@@ -128,7 +136,7 @@ export default function Services() {
           </div>
 
           <div className="p-5 sm:p-6 bg-white rounded-2xl shadow hover:shadow-xl transition">
-            <div className="text-4xl sm:text-5xl">💳</div>
+            <div className="text-4xl sm:text-5xl"></div>
             <h3 className="font-bold mt-3 text-sm sm:text-base">Secure Payment</h3>
             <p className="text-gray-500 text-xs sm:text-sm mt-2">
               Pay safely using UPI, Card or COD.
@@ -136,7 +144,7 @@ export default function Services() {
           </div>
 
           <div className="p-5 sm:p-6 bg-white rounded-2xl shadow hover:shadow-xl transition">
-            <div className="text-4xl sm:text-5xl">🚚</div>
+            <div className="text-4xl sm:text-5xl"></div>
             <h3 className="font-bold mt-3 text-sm sm:text-base">Fast Delivery</h3>
             <p className="text-gray-500 text-xs sm:text-sm mt-2">
               Get products delivered quickly.

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../api";
 import { useCart } from "../context/CartContext";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -18,7 +18,7 @@ export default function Products() {
 
   const getProducts = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5000/api/products");
+    const { data } = await API.get("/products");
       setProducts(data);
     } catch (err) {
       console.log(err);
@@ -128,3 +128,4 @@ export default function Products() {
     </div>
   );
 }
+

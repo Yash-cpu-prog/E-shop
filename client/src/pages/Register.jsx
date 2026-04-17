@@ -1,14 +1,15 @@
 import { useState } from "react";
-import axios from "axios";
+import API from "../api";
 import { useNavigate } from "react-router-dom";
 import { Mail, Lock, User } from "lucide-react";
 
 export default function Register() {
   const [form, setForm] = useState({
-  name: "",
-  email: "",
-  password: "",
-});
+    name: "",
+    email: "",
+    password: "",
+    role: "user", // ✅ default role added
+  });
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -16,17 +17,14 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!form.name || !form.email || !form.password) {
+    if (!form.name || !form.email || !form.password || !form.role) {
       return alert("All fields required ❗");
     }
 
     try {
       setLoading(true);
 
-      await axios.post(
-        "http://localhost:5000/api/auth/register",
-        form
-      );
+      await API.post("/auth/register", form);
 
       alert("Registered Successfully ✅");
       navigate("/login");
@@ -49,7 +47,7 @@ export default function Register() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40 flex items-center justify-center">
           <h1 className=" text-white text-5xl font-bold text-center px-10 leading-tight">
-            Join E-Shop  <br />
+            Join E-Shop <br />
             Start Shopping Today
           </h1>
         </div>
@@ -69,9 +67,7 @@ export default function Register() {
 
           {/* NAME */}
           <div className="flex items-center border rounded-xl mb-4 px-3 focus-within:ring-2 focus-within:ring-pink-500">
-
             <User className="text-gray-400 w-4 sm:w-5" />
-
             <input
               type="text"
               placeholder="Full Name"
@@ -81,14 +77,11 @@ export default function Register() {
               }
               className="w-full p-2 sm:p-3 outline-none bg-transparent text-sm sm:text-base"
             />
-
           </div>
 
           {/* EMAIL */}
           <div className="flex items-center border rounded-xl mb-4 px-3 focus-within:ring-2 focus-within:ring-pink-500">
-
             <Mail className="text-gray-400 w-4 sm:w-5" />
-
             <input
               type="email"
               placeholder="Email"
@@ -98,14 +91,11 @@ export default function Register() {
               }
               className="w-full p-2 sm:p-3 outline-none bg-transparent text-sm sm:text-base"
             />
-
           </div>
 
           {/* PASSWORD */}
           <div className="flex items-center border rounded-xl mb-6 px-3 focus-within:ring-2 focus-within:ring-pink-500">
-
             <Lock className="text-gray-400 w-4 sm:w-5" />
-
             <input
               type="password"
               placeholder="Password"
@@ -115,12 +105,10 @@ export default function Register() {
               }
               className="w-full p-2 sm:p-3 outline-none bg-transparent text-sm sm:text-base"
             />
-
           </div>
 
           {/* ROLE */}
           <div className="mb-6">
-
             <p className="text-sm font-semibold mb-2">Select Role</p>
 
             <div className="flex gap-6 text-sm">
@@ -152,7 +140,6 @@ export default function Register() {
               </label>
 
             </div>
-
           </div>
 
           {/* BUTTON */}

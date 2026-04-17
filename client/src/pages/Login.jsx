@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import API from "../api";
 import { useNavigate } from "react-router-dom";
 import { Mail, Lock } from "lucide-react";
 
@@ -11,27 +11,43 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+
+    // ✅ validation
+    if (!form.email.trim() || !form.password.trim()) {
+      return alert("Email & Password required ❌");
+    }
 
     try {
-      const { data } = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        form
-      );
+      setLoading(true);
+
+      const { data } = await API.post("/auth/login", form);
+
+      // ✅ safety check
+      if (!data?.token) {
+        throw new Error("Invalid response");
+      }
 
       const userData = data.user || data;
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(userData));
 
+      alert("Login Successful ✅");
+
+      // ✅ role-based navigation
       if (userData.role === "admin") {
         navigate("/admin");
       } else {
         navigate("/");
       }
 
-    } catch {
-      alert("Login Failed ❌");
+    } catch (err) {
+      console.log(err);
+
+      alert(
+        err?.response?.data?.message ||
+        "Login Failed ❌"
+      );
     } finally {
       setLoading(false);
     }
@@ -45,6 +61,7 @@ export default function Login() {
         <img
           src="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg"
           className="w-full h-full object-cover"
+          alt="login"
         />
         <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
           <h1 className="text-white text-4xl font-bold text-center px-10">
@@ -67,8 +84,7 @@ export default function Login() {
 
           {/* EMAIL */}
           <div className="flex items-center border rounded-xl mb-4 px-3 focus-within:ring-2 focus-within:ring-pink-500">
-
-            <Mail className="text-gray-400 w-4 sm:w-5" />
+            <Mail className="text-gray-400 w-5" />
 
             <input
               type="email"
@@ -77,15 +93,13 @@ export default function Login() {
               onChange={(e) =>
                 setForm({ ...form, email: e.target.value })
               }
-              className="w-full p-2 sm:p-3 outline-none bg-transparent text-sm sm:text-base"
+              className="w-full p-3 outline-none bg-transparent"
             />
-
           </div>
 
           {/* PASSWORD */}
           <div className="flex items-center border rounded-xl mb-6 px-3 focus-within:ring-2 focus-within:ring-pink-500">
-
-            <Lock className="text-gray-400 w-4 sm:w-5" />
+            <Lock className="text-gray-400 w-5" />
 
             <input
               type="password"
@@ -94,21 +108,21 @@ export default function Login() {
               onChange={(e) =>
                 setForm({ ...form, password: e.target.value })
               }
-              className="w-full p-2 sm:p-3 outline-none bg-transparent text-sm sm:text-base"
+              className="w-full p-3 outline-none bg-transparent"
             />
-
           </div>
 
           {/* BUTTON */}
           <button
+            type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-3 rounded-xl font-semibold hover:scale-105 transition disabled:opacity-50 text-sm sm:text-base"
+            className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-3 rounded-xl font-semibold hover:scale-105 transition disabled:opacity-50"
           >
             {loading ? "Logging in..." : "Login"}
           </button>
 
-          {/* REGISTER LINK */}
-          <p className="text-xs sm:text-sm text-center mt-5">
+          {/* REGISTER */}
+          <p className="text-sm text-center mt-5">
             Don’t have an account?{" "}
             <span
               onClick={() => navigate("/register")}
@@ -119,7 +133,6 @@ export default function Login() {
           </p>
 
         </form>
-
       </div>
     </div>
   );

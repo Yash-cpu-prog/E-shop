@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../../api";
 import { useNavigate } from "react-router-dom";
 
 const ProductList = () => {
@@ -7,8 +7,13 @@ const ProductList = () => {
   const navigate = useNavigate();
 
   const getProducts = async () => {
-    const { data } = await axios.get("http://localhost:5000/api/products");
-    setProducts(data);
+    try {
+      const { data } = await API.get("/products");
+      setProducts(data);
+    } catch (err) {
+      console.log(err);
+      alert("Failed to load products ❌");
+    }
   };
 
   useEffect(() => {
@@ -16,16 +21,14 @@ const ProductList = () => {
   }, []);
 
   const deleteProduct = async (id) => {
-    const token = localStorage.getItem("token");
+    if (!window.confirm("Are you sure to delete? ❗")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/products/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
+      await API.delete(`/products/${id}`);
       alert("Deleted ✅");
       getProducts();
     } catch (err) {
+      console.log(err);
       alert("Delete failed ❌");
     }
   };
@@ -47,107 +50,101 @@ const ProductList = () => {
         </button>
       </div>
 
-      {/* CONTENT AREA */}
-      <div className="overflow-y-auto">
+      {/* MOBILE */}
+      <div className="grid gap-4 sm:hidden">
+        {products.map((p) => (
+          <div key={p._id} className="bg-white rounded-xl shadow p-4 flex gap-4">
 
-        {/* MOBILE VIEW */}
-        <div className="grid gap-4 sm:hidden">
-          {products.map((p) => (
-            <div
-              key={p._id}
-              className="bg-white rounded-xl shadow p-4 flex gap-4"
-            >
-              <img
-                src={p.image}
-                className="w-20 h-20 object-cover rounded-lg"
-              />
+            <img
+              src={p.image}
+              className="w-20 h-20 object-cover rounded-lg"
+              alt={p.name}
+            />
 
-              <div className="flex-1">
-                <h3 className="font-semibold">{p.name}</h3>
-                <p className="text-green-600 font-bold">₹{p.price}</p>
-                <p className="text-gray-500 text-sm">
-                  {p.category || "N/A"}
-                </p>
+            <div className="flex-1">
+              <h3 className="font-semibold">{p.name}</h3>
+              <p className="text-green-600 font-bold">₹{p.price}</p>
+              <p className="text-gray-500 text-sm">
+                {p.category || "N/A"}
+              </p>
 
-                <div className="flex gap-2 mt-2">
+              <div className="flex gap-2 mt-2">
+                <button
+                  onClick={() => navigate(`/admin/edit/${p._id}`)}
+                  className="bg-yellow-400 px-2 py-1 text-xs rounded"
+                >
+                  Edit
+                </button>
+
+                <button
+                  onClick={() => deleteProduct(p._id)}
+                  className="bg-red-500 text-white px-2 py-1 text-xs rounded"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* DESKTOP */}
+      <div className="hidden sm:block bg-white rounded-xl shadow overflow-auto">
+
+        <table className="w-full min-w-[600px] text-left">
+          <thead className="bg-gray-200">
+            <tr>
+              <th className="p-3">Image</th>
+              <th className="p-3">Name</th>
+              <th className="p-3">Price</th>
+              <th className="p-3">Category</th>
+              <th className="p-3">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {products.map((p) => (
+              <tr key={p._id} className="border-b">
+
+                <td className="p-3">
+                  <img
+                    src={p.image}
+                    className="w-14 h-14 object-cover rounded"
+                    alt={p.name}
+                  />
+                </td>
+
+                <td className="p-3">{p.name}</td>
+
+                <td className="p-3 text-green-600 font-bold">
+                  ₹{p.price}
+                </td>
+
+                <td className="p-3">{p.category}</td>
+
+                <td className="p-3 flex gap-2">
                   <button
                     onClick={() => navigate(`/admin/edit/${p._id}`)}
-                    className="bg-yellow-400 px-2 py-1 text-xs rounded"
+                    className="bg-yellow-400 px-3 py-1 rounded"
                   >
                     Edit
                   </button>
 
                   <button
                     onClick={() => deleteProduct(p._id)}
-                    className="bg-red-500 text-white px-2 py-1 text-xs rounded"
+                    className="bg-red-500 text-white px-3 py-1 rounded"
                   >
                     Delete
                   </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+                </td>
 
-        {/* DESKTOP VIEW */}
-        <div className="hidden sm:block bg-white rounded-xl shadow overflow-auto">
-
-          <table className="w-full min-w-[600px] text-left">
-
-            <thead className="bg-gray-200">
-              <tr>
-                <th className="p-3">Image</th>
-                <th className="p-3">Name</th>
-                <th className="p-3">Price</th>
-                <th className="p-3">Category</th>
-                <th className="p-3">Actions</th>
               </tr>
-            </thead>
-
-            <tbody>
-              {products.map((p) => (
-                <tr key={p._id} className="border-b">
-
-                  <td className="p-3">
-                    <img
-                      src={p.image}
-                      className="w-14 h-14 object-cover rounded"
-                    />
-                  </td>
-
-                  <td className="p-3">{p.name}</td>
-
-                  <td className="p-3 text-green-600 font-bold">
-                    ₹{p.price}
-                  </td>
-
-                  <td className="p-3">{p.category}</td>
-
-                  <td className="p-3 flex gap-2">
-                    <button
-                      onClick={() => navigate(`/admin/edit/${p._id}`)}
-                      className="bg-yellow-400 px-3 py-1 rounded"
-                    >
-                      Edit
-                    </button>
-
-                    <button
-                      onClick={() => deleteProduct(p._id)}
-                      className="bg-red-500 text-white px-3 py-1 rounded"
-                    >
-                      Delete
-                    </button>
-                  </td>
-
-                </tr>
-              ))}
-            </tbody>
-
-          </table>
-
-        </div>
+            ))}
+          </tbody>
+        </table>
 
       </div>
+
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import API from "../api";
 
 export default function Contact() {
   const [form, setForm] = useState({
@@ -8,19 +8,32 @@ export default function Contact() {
     message: "",
   });
 
+  const [loading, setLoading] = useState(false); // ✅ added
+
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    await axios.post("http://localhost:5000/api/contact/send", form);
+    // ✅ basic validation
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+      return alert("All fields are required ❌");
+    }
 
-    alert("Message Sent ✅");
-    setForm({ name: "", email: "", message: "" });
+    try {
+      setLoading(true);
 
-  } catch (err) {
-    alert("Failed ❌");
-  }
-};
+      const { data } = await API.post("/contact/send", form);
+
+      alert(data?.message || "Message Sent ✅");
+
+      setForm({ name: "", email: "", message: "" });
+
+    } catch (err) {
+      console.log(err);
+      alert(err?.response?.data?.message || "Failed ❌");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="bg-gray-50 min-h-screen px-4 sm:px-6 md:px-16 py-10 md:py-12">
@@ -55,7 +68,7 @@ export default function Contact() {
             onChange={(e) =>
               setForm({ ...form, name: e.target.value })
             }
-            className="w-full mb-3 md:mb-4 p-3 border rounded-lg text-sm md:text-base"
+            className="w-full mb-3 md:mb-4 p-3 border rounded-lg"
             required
           />
 
@@ -66,7 +79,7 @@ export default function Contact() {
             onChange={(e) =>
               setForm({ ...form, email: e.target.value })
             }
-            className="w-full mb-3 md:mb-4 p-3 border rounded-lg text-sm md:text-base"
+            className="w-full mb-3 md:mb-4 p-3 border rounded-lg"
             required
           />
 
@@ -77,12 +90,16 @@ export default function Contact() {
             onChange={(e) =>
               setForm({ ...form, message: e.target.value })
             }
-            className="w-full mb-3 md:mb-4 p-3 border rounded-lg text-sm md:text-base"
+            className="w-full mb-3 md:mb-4 p-3 border rounded-lg"
             required
           />
 
-          <button className="w-full bg-pink-500 hover:bg-pink-600 text-white py-3 rounded-lg transition text-sm md:text-base">
-            Send Message
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-pink-500 hover:bg-pink-600 text-white py-3 rounded-lg transition"
+          >
+            {loading ? "Sending..." : "Send Message"}
           </button>
         </form>
 
@@ -90,22 +107,22 @@ export default function Contact() {
         <div className="flex flex-col justify-center gap-4">
 
           <div className="bg-white p-5 md:p-6 rounded-xl shadow">
-            <h3 className="font-bold text-base md:text-lg">Address</h3>
-            <p className="text-gray-500 mt-2 text-sm md:text-base">
+            <h3 className="font-bold">Address</h3>
+            <p className="text-gray-500 mt-2">
               Maharashtra, India
             </p>
           </div>
 
           <div className="bg-white p-5 md:p-6 rounded-xl shadow">
-            <h3 className="font-bold text-base md:text-lg">Phone</h3>
-            <p className="text-gray-500 mt-2 text-sm md:text-base">
+            <h3 className="font-bold">Phone</h3>
+            <p className="text-gray-500 mt-2">
               +91 9021116479
             </p>
           </div>
 
           <div className="bg-white p-5 md:p-6 rounded-xl shadow">
-            <h3 className="font-bold text-base md:text-lg">Email</h3>
-            <p className="text-gray-500 mt-2 text-sm md:text-base">
+            <h3 className="font-bold">Email</h3>
+            <p className="text-gray-500 mt-2">
               yashkalamkar07@gmail.com
             </p>
           </div>
@@ -113,7 +130,6 @@ export default function Contact() {
         </div>
 
       </div>
-
     </div>
   );
 }

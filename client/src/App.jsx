@@ -38,6 +38,7 @@ import ProductList from "./admin/pages/ProductList";
 import EditProduct from "./admin/pages/EditProduct";
 import Orders from "./admin/pages/Orders";
 
+
 // 🏠 HOME (NO separate file)
 function Home() {
   return (
@@ -47,6 +48,7 @@ function Home() {
       <Products />
       <Banner />
       <FeaturedProducts />
+      
       <Deals />
       <Trending />
       <Brands />

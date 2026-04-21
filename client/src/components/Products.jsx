@@ -1,3 +1,70 @@
+// import { useEffect, useState } from "react";
+// import { useParams } from "react-router-dom";
+// import API from "../api";
+
+// export default function ProductDetails() {
+//   const { id } = useParams();
+//   const [product, setProduct] = useState(null);
+
+//   useEffect(() => {
+//     const fetchProduct = async () => {
+//       try {
+//         const { data } = await API.get(`/products/${id}`);
+//         setProduct(data);
+//       } catch (error) {
+//         console.log(error);
+//       }
+//     };
+
+//     fetchProduct();
+//   }, [id]);
+
+//   if (!product) {
+//     return <p className="text-center mt-10">Loading...</p>;
+//   }
+
+//   return (
+//     <div className="max-w-5xl mx-auto p-6">
+
+//       <div className="grid md:grid-cols-2 gap-10">
+
+//         {/* IMAGE */}
+//         <img
+//           src={
+//             product.image?.startsWith("http")
+//               ? product.image
+//               : `http://localhost:5000/uploads/${product.image}`
+//           }
+//           alt={product.name}
+//           className="w-full rounded-xl object-cover"
+//         />
+
+//         {/* DETAILS */}
+//         <div>
+//           <h1 className="text-3xl font-bold">{product.name}</h1>
+
+//           <p className="text-gray-600 mt-4">
+//             {product.description}
+//           </p>
+
+//           <p className="text-2xl font-bold text-green-600 mt-4">
+//             ₹{product.price}
+//           </p>
+
+//           <button className="mt-6 bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 rounded-lg">
+//             Add to Cart
+//           </button>
+//         </div>
+
+//       </div>
+
+//     </div>
+//   );
+// }
+
+
+
+
 import { useEffect, useState } from "react";
 import API from "../api";
 import { useCart } from "../context/CartContext";
@@ -128,4 +195,3 @@ export default function Products() {
     </div>
   );
 }
-

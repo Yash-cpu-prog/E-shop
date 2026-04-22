@@ -148,17 +148,17 @@ const Trending = () => {
             >
 
               {/* IMAGE */}
-              <div className="h-40 md:h-56 w-full overflow-hidden">
-                <img
-                  src={
-                    p.image?.startsWith("http")
-                      ? p.image
-                      : `http://localhost:5000/uploads/${p.image}`
-                  }
-                  className="w-full h-full object-cover hover:scale-110 transition duration-300"
-                  alt={p.name}
-                />
-              </div>
+             <div className="h-44 md:h-60 w-full bg-gray-100 flex items-center justify-center p-2">
+  <img
+    src={
+      p.image?.startsWith("http")
+        ? p.image
+        : `https://e-shop-dvh2.onrender.com/uploads/${p.image}`
+    }
+    className="h-full w-full object-contain hover:scale-105 transition duration-300"
+    alt={p.name}
+  />
+</div>
 
               {/* CONTENT */}
               <div className="p-2 md:p-3">

@@ -1,21 +1,24 @@
 import { Heart, ShoppingCart, Menu, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import logo from "../assets/logo.jpeg";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="flex justify-between items-center px-4 md:px-10 py-4 md:py-5 bg-white shadow sticky top-0 z-50">
+  <div className="flex justify-between items-center pl-2 pr-4 md:pl-6 md:pr-10 py-2 md:py-3 bg-white shadow sticky top-0 z-50">
 
       {/* Logo */}
-      <h1
-        className="text-xl md:text-2xl font-bold cursor-pointer"
-        onClick={() => navigate("/")}
-      >
-        <span className="text-pink-500">E</span>-shop
-      </h1>
+      <div className="-ml-4 md:-ml-8">
+  <img
+    src={logo}
+    alt="Eshop Logo"
+    className="h-8 w-32 md:h-14 md:w-40 object-contain cursor-pointer"
+    onClick={() => navigate("/")}
+  />
+</div>
 
       {/* Desktop Menu */}
       <ul className="hidden md:flex gap-8 text-gray-600 font-medium">

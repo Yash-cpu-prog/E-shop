@@ -1,3 +1,6 @@
+import logo from "../assets/logo.jpeg";
+import { FaLinkedin, FaGithub } from "react-icons/fa";
+
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300 mt-12 md:mt-16 relative overflow-hidden">
@@ -10,9 +13,11 @@ export default function Footer() {
         {/* Brand */}
         <div className="transform hover:scale-105 transition duration-300 text-center sm:text-left">
 
-          <h1 className="text-2xl sm:text-3xl font-bold text-white">
-            <span className="text-pink-500 animate-pulse">E</span>-shop
-          </h1>
+          <img
+  src={logo}
+  alt="Eshop Logo"
+  className="h-10 sm:h-12 mx-auto sm:mx-0 object-contain"
+/>
 
           <p className="mt-3 text-xs sm:text-sm text-gray-400">
             Your one-stop destination for all modern shopping needs.
@@ -90,6 +95,29 @@ export default function Footer() {
           </ul>
 
         </div>
+        <div className="mt-5 flex justify-center sm:justify-start gap-4">
+
+  {/* LinkedIn */}
+  <a
+    href="https://www.linkedin.com/in/yashkalamkar"
+    target="_blank"
+    rel="noreferrer"
+    className="bg-gray-800 p-2 rounded-full hover:bg-pink-500 transition transform hover:scale-110"
+  >
+    <FaLinkedin size={18} />
+  </a>
+
+  {/* GitHub */}
+  <a
+    href="https://github.com/Yash-cpu-prog"
+    target="_blank"
+    rel="noreferrer"
+    className="bg-gray-800 p-2 rounded-full hover:bg-pink-500 transition transform hover:scale-110"
+  >
+    <FaGithub size={18} />
+  </a>
+
+</div>
 
       </div>
 
@@ -101,3 +129,4 @@ export default function Footer() {
     </footer>
   );
 }
+
